@@ -83,7 +83,7 @@
 | URL           | /music                                                      |
 | 요청 메소드   | POST                                                         |
 | 콘텐트 타입   | content-type:x-www-form-urlencoded                           |
-| 메세지 구조   | - **singer : 가수**<br />- **song : 노래**<br />- genre : 장르<br />- |
+| 메세지 구조   | - **singer : 가수**<br />- song : 노래<br />- genre : 장르<br /> |
 | 요청메세지 예 | { <br/> "singer" : "아이유",<br/> "song" : "좋은날",<br/> "genre" : "발라드"<br/>} |
 
 #### 응답
