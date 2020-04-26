@@ -35,6 +35,8 @@
 |   목록    | 음악 목록 전체보기 |     /music     |  GET   |
 |   CRUD    | 음악 정보 상세보기 |   /music/:musicid|  GET   |
 |           |   음악 정보 추가   |     /music     |  POST  |
+|           |   음악 정보 수정   |     /music     |  PUT  |
+|           |   음악 정보 수정   |     /music::musicid| DELETE |
 
 --------------
 
@@ -104,7 +106,7 @@
 | URL           | /music                                                      |
 | 요청 메소드   | PUT                                                         |
 | 콘텐트 타입   | content-type:x-www-form-urlencoded                           |
-| 메세지 구조   | - **id : 노래 id**<br />singer : 가수<br />- song : 노래<br />- genre : 장르<br /> |
+| 메세지 구조   | - **id : 노래 id**<br />- singer : 가수<br />- song : 노래<br />- genre : 장르<br /> |
 | 요청메세지 예 | { "id" : "4" <br/> "singer" : "아이유",<br/> "song" : "좋은날",<br/> "genre" : "발라드"<br/>} |
 
 #### 응답
@@ -114,5 +116,22 @@
 | 메세지 구조 | - msg : 성공/실패 메세지<br />- data<br />-- id : 음악 ID<br />-- singer : 가수<br />-- song : 음악<br />-- genre : 장르<br /> |
 | 메세지 예   | {<br/>    "msg": "SUCCESS",<br/>    "data": {<br/>        "musicID": 4,<br/>        "singer": 아이유",<br/>        "song": "좋은날",<br/>        "genre": "발라드",<br/>}<br/>} |
 
+--------------
+
+- ### 음악 정보 수정
+
+#### 요청
+
+| 업무          | 음악 정보 삭제                                               |
+| ------------- | ------------------------------------------------------------ |
+| URL           | /music/:musicID                                                      |
+| 요청 메소드   | DELETE                                                         |
+
+#### 응답
+
+| 컨텐트 타입 | JSON                                                         |
+| ----------- | ------------------------------------------------------------ |
+| 메세지 구조 | - msg : 성공/실패 메세지<br />- data<br />-- id : 음악 ID<br />-- singer : 가수<br />-- song : 음악<br />-- genre : 장르<br /> |
+| 메세지 예   | {<br/>    "msg": "SUCCESS",<br/>    "data": {<br/>        "musicID": 4,<br/>        "singer": 아이유",<br/>        "song": "좋은날",<br/>        "genre": "발라드",<br/>}<br/>} |
 --------------
 양식출처 -202012707 김다영-
