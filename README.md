@@ -36,7 +36,7 @@
 |   CRUD    | 음악 정보 상세보기 |   /music/:musicid|  GET   |
 |           |   음악 정보 추가   |     /music     |  POST  |
 |           |   음악 정보 수정   |     /music     |  PUT  |
-|           |   음악 정보 수정   |     /music::musicid| DELETE |
+|           |   음악 정보 수정   |     /music/:musicid| DELETE |
 
 --------------
 
