@@ -5,6 +5,8 @@ const music = require('../model/MusicModel');
 router.get('/music', showMusicList);
 router.get('/music/:musicId', showMusicDetail);
 router.post('/music', addMusic);
+router.put('/music', updateMusic);
+router.delete('/music/:musicID', deleteMusic);
 
 module.exports = router;
 
@@ -50,5 +52,37 @@ async function addMusic(req, res) {
     }
     catch ( error ) {
         res.status(500).send(error.msg);
+    }
+}
+
+async function updateMusic(req, res) {
+    const musicID = parseInt(req.body.id);
+    const singer =  req.body.singer;
+    const song = req.body.song;
+    const genre = req.body.genre;
+
+    if (!musicID) {
+        res.status(400).send({error:'ERROR'});
+        return;
+    }
+
+    try {
+        const result = await music.updateMusic(musicID, singer, song, genre);
+        res.send({msg:'success', data:result});
+    }
+    catch ( error ) {
+        res.status(500).send(error.msg);
+    }
+}
+
+async function deleteMusic(req, res) {
+    try {
+        const musicId = parseInt(req.params.musicID);
+        console.log('musicId : ', musicId);
+        const result = await music.deleteMusic(musicId);
+        res.send({msg:'음악 삭제 완료', data:result});
+    }
+    catch ( error ) {
+        res.status(500).send({msg:error.msg});
     }
 }

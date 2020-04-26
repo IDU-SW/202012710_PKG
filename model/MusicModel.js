@@ -40,6 +40,33 @@ class Music {
             reject({msg:'Can not find music', code:404});
         });
     }
+
+    updateMusic(musicID, singer, song, genre){
+        return new Promise((resolve, reject) => {
+            for (var music1 of this.music) {
+                if (music1.id == musicID) {
+                    let upMusic = {musicID, singer, song, genre};
+                    this.music.splice(musicID, 1, upMusic);
+                    resolve(upMusic);
+                    return;
+                }
+            }
+            reject({msg:'Can not find music', code:404});
+        });
+    }
+
+    deleteMusic(id) {
+        return new Promise((resolve, reject) => {
+            for (var music1 of this.music ) {
+                if ( music1.id == id ) {
+                    this.music.splice(id, 1);
+                    resolve(music1);
+                    return;
+                }
+            }
+            reject({msg:'Can not find music', code:404});
+        });
+    }
 }
 
 module.exports = new Music();
