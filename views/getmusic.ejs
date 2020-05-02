@@ -1,0 +1,21 @@
+<html>
+<head>
+   <meta charset="UTF-8" />
+    <title><%= music.song %></title>
+</head>
+<body>
+    <h1><%= music.song %></h1>
+        - 가수 : <%= music.singer %> <br/>
+        - 장르 : <%= music.genre %> <br/>
+    </br>
+
+    <form name="detail" method="post" action="/music/delete">
+        <input type="hidden" name="id" value="<%= music.id %>">
+        <input type="button" value="수정" onclick="location.href='/music/update/<%= music.id %>'">&nbsp;
+        <input type="submit" value="삭제" > &nbsp;
+        <input type="button" value="리스트로 이동" onclick="location.href='/music'">&nbsp;
+    </form>  
+
+    
+</body>
+</html>

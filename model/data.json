@@ -1,6 +1,6 @@
-[{"id":0,"singer":"weekend","song":"Blinding Lights", "genre":"POP"},
-    {"id":1,"singer":"Dua Lipa","song":"Physical", "genre":"POP"},
-    {"id":2,"singer":"JACKBOYS","song":"OUT WEST", "genre":"Hip Hop"},
-    {"id":3,"singer":"SZA, Justin Timberlake","song":"The Other Side", "genre":"POP"},
-    {"id":4,"singer":"Arizona Zervas","song":"ROXANNE", "genre":"Hip Hop"}
+[{"id":1,"singer":"weekend","song":"Blinding Lights", "genre":"POP"},
+    {"id":2,"singer":"Dua Lipa","song":"Physical", "genre":"POP"},
+    {"id":3,"singer":"JACKBOYS","song":"OUT WEST", "genre":"Hip Hop"},
+    {"id":4,"singer":"SZA, Justin Timberlake","song":"The Other Side", "genre":"POP"},
+    {"id":5,"singer":"Arizona Zervas","song":"ROXANNE", "genre":"Hip Hop"}
 ]

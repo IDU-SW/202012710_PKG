@@ -1,0 +1,17 @@
+<html>
+<head>
+   <meta charset="UTF-8" />
+    <title>musiclist</title>
+</head>
+<body>
+    <h1>곡 : <%= count %></h1>
+    <p>
+        <input type="button" value="노래 추가" onclick="location.href='/music/add'">
+    </p>
+    <% musiclist.forEach(function(music) { %>
+    <a href='/music/<%= music.id %>'>- ID : <%= music.id %></a><br/>
+    - 가수 : <%= music.singer %> <br/>
+    - 제목 : <%= music.song %> <br/> <br/>
+    <% }) %>
+</body>
+</html>
