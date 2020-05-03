@@ -46,7 +46,7 @@ class Music {
             for (var music1 of this.music) {
                 if (music1.id == id) {
                     let upMusic = {id, singer, song, genre};
-                    this.music.splice(id, 1, upMusic);
+                    this.music.splice(id-1, 1, upMusic);
                     resolve(upMusic);
                     return;
                 }
