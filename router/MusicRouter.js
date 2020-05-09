@@ -18,12 +18,9 @@ function addMusicForm(req, res){
 
 async function updateMusicForm(req, res){
     try {
-        // 음악 상세 정보 Id
         const musicId = req.params.musicId;
-        console.log('musicId : ', musicId);
         const info = await music.getMusicDetail(musicId);
-        //res.send(info);
-        res.render('updatemusicform',{music:info})
+        res.render('updatemusicform',{result:info[0]})
     }
     catch ( error ) {
         console.log('Can not find, 404');
@@ -31,21 +28,18 @@ async function updateMusicForm(req, res){
     }
 }
 
-function showMusicList(req, res) {
-    const musicList = music.getMusicList();
-    //const result = { data:musicList, count:musicList.length };
+async function showMusicList(req, res) {
+    const musicList = await  music.getMusicList();
+    const result = { count:musicList.length, data:musicList};
     //res.send(result);
-    res.render('getmusiclist', {musiclist:musicList, count:musicList.length})
+    res.render('getmusiclist', {result:result})
 }
 
 async function showMusicDetail(req, res) {
     try {
-        // 음악 상세 정보 Id
         const musicId = req.params.musicId;
-        console.log('musicId : ', musicId);
-        const info = await music.getMusicDetail(musicId);
-        //res.send(info);
-        res.render('getmusic',{music:info})
+        const data = await music.getMusicDetail(musicId);
+        res.render('getmusic',{result:data[0]})
     }
     catch ( error ) {
         console.log('Can not find, 404');
@@ -53,24 +47,20 @@ async function showMusicDetail(req, res) {
     }
 }
 
-
-// 새 음악 추가
-// POST 요청 분석 -> 바디 파서
 async function addMusic(req, res) {
-    const singer = req.body.singer;
+    const artist = req.body.artist;
 
-    if (!singer) {
-        res.status(400).send({error:'singer 누락'});
+    if (!artist) {
+        res.status(400).send({error:'artist 누락'});
         return;
     }
 
-    const song = req.body.song;
+    const title = req.body.title;
     const genre = req.body.genre;
 
     try {
-        const result = await music.addMusic(singer, song, genre);
-        //res.send({msg:'success', data:result});
-        res.render('addmusic',{music:result})
+        const data = await music.addMusic(artist, title, genre);
+        res.render('addmusic',{result:data[0]});
     }
     catch ( error ) {
         res.status(500).send(error.msg);
@@ -80,8 +70,8 @@ async function addMusic(req, res) {
 async function updateMusic(req, res) {
     
     const id = parseInt(req.params.musicId);
-    const singer =  req.body.singer;
-    const song = req.body.song;
+    const artist =  req.body.artist;
+    const title = req.body.title;
     const genre = req.body.genre;
 
     if (!id) {
@@ -90,9 +80,8 @@ async function updateMusic(req, res) {
     }
 
     try {
-        const result = await music.updateMusic(id, singer, song, genre);
-        //res.send({msg:'success', data:result});
-        res.render('updatemusic',{msg:'success',music:result})
+        const result = await music.updateMusic(id, artist, title, genre);
+        res.render('updatemusic',{msg:'success',music:result[0]})
     }
     catch ( error ) {
         res.status(500).send(error.msg);
@@ -102,10 +91,9 @@ async function updateMusic(req, res) {
 async function deleteMusic(req, res) {
     try {
         const musicId = parseInt(req.body.id);
-        console.log('musicId : ', musicId);
-        const result = await music.deleteMusic(musicId);
-        //res.send({msg:'음악 삭제 완료', data:result});
-        res.render('deletemusic',{msg:'음악 삭제 완료', music:result})
+        await music.deleteMusic(musicId);
+        
+        res.render('deletemusic',{msg:'음악 삭제 완료'})
     }
     catch ( error ) {
         res.status(500).send({msg:error.msg});

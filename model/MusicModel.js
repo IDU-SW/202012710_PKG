@@ -1,71 +1,94 @@
-const fs = require('fs');
+const {prepareTable} = require('./prepareTable');
+const pool = require('./dbConnection');
 
 class Music {
-    constructor() {
-        const data = fs.readFileSync('./model/data.json');
-        this.music = JSON.parse(data)
-    }
 
-    // Promise 예제
-    getMusicList() {
-        if (this.music) {
-            return this.music;
+    getMusicList = async () => {
+        const sql = 'SELECT * FROM musiclist;';
+        let conn;
+        try {
+            conn = await pool.getConnection();
+            const [rows, metadata] = await conn.query(sql);
+            return rows;
+        } catch (error) {
+            console.error(error);
+        } finally {
+            if (conn) {
+                conn.release();
+            }
         }
-        else {
-            return [];
+    }
+
+    getMusicDetail = async (musicid) => {
+        let conn;
+        try {
+            conn = await pool.getConnection();
+            const sql = 'SELECT * FROM musiclist WHERE musicid = ?;';
+            const [rows, metadata] = await conn.query(sql,musicid);
+            return rows;
+        } catch (error) {
+            console.error(error);
+        } finally {
+            if (conn) {
+                conn.release();
+            }
         }
     }
 
-    addMusic(singer, song, genre) {
-        return new Promise((resolve, reject) => {
-            let last = this.music[this.music.length - 1];
-            let id = last.id + 1;
-
-            let newMusic = {id, singer, song, genre};
-            this.music.push(newMusic);
-
-            resolve(newMusic);
-        });
+    addMusic = async (artist, title, genre) => {
+        let conn;
+        try {
+            conn = await pool.getConnection();
+            const sql1 = 'INSERT INTO musiclist(artist, title, genre) values(?,?,?);';
+            const data = [artist, title, genre];
+            const result1 = await conn.query(sql1, data);
+            const sql2 = 'SELECT * FROM musiclist WHERE musicid = ?;';
+            const result2 = await conn.query(sql2,result1[0].insertId);
+            return result2[0];
+        } catch (error) {
+            console.error(error);
+        } finally {
+            if (conn) {
+                conn.release();
+            }
+        }
+        
     }
 
-    // Promise - Reject
-    getMusicDetail(MusicId) {
-        return new Promise((resolve, reject) => {
-            for (var song of this.music ) {
-                if ( song.id == MusicId ) {
-                    resolve(song);
-                    return;
-                }
+    updateMusic = async (musicid, artist, title, genre) => {
+        const sql = 'UPDATE musiclist SET artist = ?, title = ?, genre =? WHERE musicid = ?;';
+
+        let conn;
+        try {
+            conn = await pool.getConnection();
+            await conn.query(sql, [artist,title,genre,musicid] );
+
+            return this.getMusicDetail(musicid);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            if (conn) {
+                conn.release();
             }
-            reject({msg:'Can not find music', code:404});
-        });
+        }
     }
 
-    updateMusic(id, singer, song, genre){
-        return new Promise((resolve, reject) => {
-            for (var music1 of this.music) {
-                if (music1.id == id) {
-                    let upMusic = {id, singer, song, genre};
-                    this.music.splice(id-1, 1, upMusic);
-                    resolve(upMusic);
-                    return;
-                }
-            }
-            reject({msg:'Can not find music', code:404});
-        });
-    }
+    deleteMusic = async (musicid) => {
+        const sql = 'DELETE FROM musiclist WHERE musicid = ?;';
 
-    deleteMusic(id) {
-        return new Promise((resolve, reject) => {
-            for (var music1 of this.music ) {
-                if ( music1.id == id ) {
-                    this.music.splice(id, 1);
-                    resolve(music1);
-                    return;
-                }
+        let conn;
+        try {
+            conn = await pool.getConnection();
+            const result = await conn.query(sql, [musicid]);
+
+            return null;
+        } catch (error) {
+            console.error(error);
+        } finally {
+            if (conn) {
+                conn.release();
             }
-            reject({msg:'Can not find music', code:404});
-        });
+        }
     }
 }
 

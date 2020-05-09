@@ -1,16 +1,16 @@
 <html>
 <head>
    <meta charset="UTF-8" />
-    <title><%= music.song %> 수정</title>
+    <title><%= result.title %> 수정</title>
 </head>
 <body>
-    <h1><%= music.song %> 수정</h1>
+    <h1><%= result.title %> 수정</h1>
     
     </br>
-    <form method="post" action="/music/<%= music.id %>">
-        가수 : <input type="text" name="singer" value="<%= music.singer %>"> <br/>
-        노래 : <input type="text" name="song" value="<%= music.song %>"> <br/>
-        장르 : <input type="text" name="genre" value="<%= music.genre %>"><br/><br/>
+    <form method="post" action="/music/<%= result.musicid %>">
+        가수 : <input type="text" name="artist" value="<%= result.artist %>"> <br/>
+        노래 : <input type="text" name="title" value="<%= result.title %>"> <br/>
+        장르 : <input type="text" name="genre" value="<%= result.genre %>"><br/><br/>
         <input type="submit" value="수정" > &nbsp;
         <input type="button" value="이전으로" onClick="history.go(-1)">
     </form>

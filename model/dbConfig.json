@@ -1,0 +1,7 @@
+{
+    "host": "localhost",
+    "user": "kyunggeun",
+    "password": "cometrue",
+    "port": 3306,
+    "database": "music"
+}

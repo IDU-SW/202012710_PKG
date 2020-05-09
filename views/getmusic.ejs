@@ -1,17 +1,17 @@
 <html>
 <head>
    <meta charset="UTF-8" />
-    <title><%= music.song %></title>
+    <title><%= result.title %></title>
 </head>
 <body>
-    <h1><%= music.song %></h1>
-        - 가수 : <%= music.singer %> <br/>
-        - 장르 : <%= music.genre %> <br/>
+    <h1><%= result.title %></h1>
+        - 가수 : <%= result.artist %> <br/>
+        - 장르 : <%= result.genre %> <br/>
     </br>
 
     <form name="detail" method="post" action="/music/delete">
-        <input type="hidden" name="id" value="<%= music.id %>">
-        <input type="button" value="수정" onclick="location.href='/music/update/<%= music.id %>'">&nbsp;
+        <input type="hidden" name="id" value="<%= result.musicid %>">
+        <input type="button" value="수정" onclick="location.href='/music/update/<%= result.musicid %>'">&nbsp;
         <input type="submit" value="삭제" > &nbsp;
         <input type="button" value="리스트로 이동" onclick="location.href='/music'">&nbsp;
     </form>  
