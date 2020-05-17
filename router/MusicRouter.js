@@ -20,7 +20,7 @@ async function updateMusicForm(req, res){
     try {
         const musicId = req.params.musicId;
         const info = await music.getMusicDetail(musicId);
-        res.render('updatemusicform',{result:info[0]})
+        res.render('updatemusicform',{result:info})
     }
     catch ( error ) {
         console.log('Can not find, 404');
@@ -39,7 +39,7 @@ async function showMusicDetail(req, res) {
     try {
         const musicId = req.params.musicId;
         const data = await music.getMusicDetail(musicId);
-        res.render('getmusic',{result:data[0]})
+        res.render('getmusic',{result:data})
     }
     catch ( error ) {
         console.log('Can not find, 404');
@@ -55,12 +55,11 @@ async function addMusic(req, res) {
         return;
     }
 
-    const title = req.body.title;
-    const genre = req.body.genre;
-
+    const addmusic =req.body;
+    console.log("music : ", music);
     try {
-        const data = await music.addMusic(artist, title, genre);
-        res.render('addmusic',{result:data[0]});
+        const data = await music.addMusic(addmusic);
+        res.render('addmusic',{result:data});
     }
     catch ( error ) {
         res.status(500).send(error.msg);
@@ -70,9 +69,7 @@ async function addMusic(req, res) {
 async function updateMusic(req, res) {
     
     const id = parseInt(req.params.musicId);
-    const artist =  req.body.artist;
-    const title = req.body.title;
-    const genre = req.body.genre;
+    const updatemusic = req.body;
 
     if (!id) {
         res.status(400).send({error:'ERROR'});
@@ -80,8 +77,9 @@ async function updateMusic(req, res) {
     }
 
     try {
-        const result = await music.updateMusic(id, artist, title, genre);
-        res.render('updatemusic',{msg:'success',music:result[0]})
+        await music.updateMusic(id, updatemusic);
+        const result = await music.getMusicDetail(id);
+        res.render('updatemusic',{msg:'success',music:result});
     }
     catch ( error ) {
         res.status(500).send(error.msg);
