@@ -9,7 +9,7 @@
         <input type="button" value="노래 추가" onclick="location.href='/music/add'">
     </p>
     <% for(i=0;i<result.count;i++){ %>
-    <a href='/music/<%= result.data[i].musicid %>'>- ID : <%= result.data[i].musicid %></a><br/>
+    <a href='/music/<%= result.data[i]._id %>'>- ID : <%= result.data[i]._id %></a><br/>
     - 가수 : <%= result.data[i].artist %> <br/>
     - 제목 : <%= result.data[i].title %> <br/> <br/>
     <% } %>

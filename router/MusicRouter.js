@@ -68,7 +68,7 @@ async function addMusic(req, res) {
 
 async function updateMusic(req, res) {
     
-    const id = parseInt(req.params.musicId);
+    const id = req.params.musicId;
     const updatemusic = req.body;
 
     if (!id) {
@@ -88,7 +88,7 @@ async function updateMusic(req, res) {
 
 async function deleteMusic(req, res) {
     try {
-        const musicId = parseInt(req.body.id);
+        const musicId = req.body.id;
         await music.deleteMusic(musicId);
         
         res.render('deletemusic',{msg:'음악 삭제 완료'})

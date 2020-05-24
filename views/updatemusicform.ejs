@@ -7,7 +7,7 @@
     <h1><%= result.title %> 수정</h1>
     
     </br>
-    <form method="post" action="/music/<%= result.musicid %>">
+    <form method="post" action="/music/<%= result._id %>">
         가수 : <input type="text" name="artist" value="<%= result.artist %>"> <br/>
         노래 : <input type="text" name="title" value="<%= result.title %>"> <br/>
         장르 : <input type="text" name="genre" value="<%= result.genre %>"><br/><br/>
