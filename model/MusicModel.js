@@ -1,25 +1,94 @@
-const MongoClient = require('mongodb').MongoClient;
-const url = 'mongodb://localhost:27017/example';
-var ObjectID = require('mongodb').ObjectID;
-var db;
-MongoClient.connect(url,{useNewUrlParser:true}, (err,client)=>{
-    if (err){
-        console.error('mongo db connect error ', err);
-        return;
-    }
-    console.log('connect success ');
-    db = client.db('example');
+const {prepareTable} = require('./prepareTable');
+const pool = require('./dbConnection');
+const fs = require('fs');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op
+
+const sequelize = new Sequelize('music', 'kyunggeun', 'cometrue', {
+    dialect: 'mysql', host: '127.0.0.1'
 });
 
+class Musiclist extends Sequelize.Model {}
+Musiclist.init({
+    musicid:{
+        type: Sequelize.INTEGER,
+        unique: true,
+        autoIncrement: true,
+        primaryKey: true
+    },
+    artist:{
+        type: Sequelize.STRING,
+        field: 'artist'
+    },
+    title:{
+        type: Sequelize.STRING,
+        field: 'title'
+    },
+    genre:{
+        type: Sequelize.STRING,
+        field: 'genre'
+    }
+},{tableName:'musiclist',sequelize,timestamps:false, sequelize });
+
+class MusicAlbum extends Sequelize.Model {}
+MusicAlbum.init({
+    albumid:{
+        type: Sequelize.INTEGER,
+        unique: true,
+        autoIncrement: true,
+        primaryKey: true
+    },
+    fk_musiclist_id:{
+        type: Sequelize.INTEGER,
+        field: 'fk_musiclist_id'
+    },
+    album:{
+        type: Sequelize.STRING,
+        field: 'album'
+    }
+},{tableName:'musicalbum',sequelize,timestamps:false, sequelize });
+
 class Music {
-    
+    constructor(){
+        try{
+            this.prepareModel();
+        } catch(error) {
+            console.error("constructor error ", error);
+        }
+    }
+
+    async prepareModel() {
+        try {
+            await Musiclist.sync({force:true});
+            await MusicAlbum.sync({force:true});
+
+            Musiclist.hasOne(MusicAlbum, {
+                foreignKey:'fk_musiclist_id',
+                onDelete:'cascade'
+            });
+
+            await this.allDataInsert();
+        }
+        catch (error) {
+            console.log('prepareModel Error ', error);
+        }
+    }
+
+    async allDataInsert() {
+        const data = fs.readFileSync('./model/data.json');
+        const musiclist = JSON.parse(data);
+        for (var music of musiclist ) {
+            await this.addMusic(music);
+        }
+    }
+
     getMusicList = async () => {
         let musiclist;
-        await db.collection('musiclist').find({}).toArray()
-        .then( result =>{
+        await Musiclist.findAll({})
+        .then( result => {
             musiclist = result;
         })
-        .catch(error => {
+        .catch( error => {
             console.error('getMusicList error :', error);
         });
         return musiclist;
@@ -27,48 +96,68 @@ class Music {
 
     getMusicDetail = async (id) => {
         try {
-            const row = await db.collection('musiclist').findOne({ _id: new ObjectID(id) });
+            const row = await Musiclist.findAll({
+                where:{musicid:id},
+                include: [{model:MusicAlbum}]
+            })
             if ( row ) {
-                console.log("getMusicDetail row : " , row);
-                return row;
+                console.log("getMusicDetail row : " , row[0])
+                return row[0];
             }
         }
         catch (error) {
             console.log('getMusicDetail error : ', error);
         }
-        
     }
 
-    addMusic = async (addmusic) => {
+    addMusic = async (music) => {
+        console.log("addmusic " , music);
         try {
-            let addrow = await db.collection('musiclist').insertOne({
-                artist: addmusic.artist,
-                title: addmusic.title,
-                genre: addmusic.genre
-            }, { logging: false });
-            return addrow.ops[0];
+            
+            let addmusic = await Musiclist.create({ 
+                            artist : music.artist,
+                            title : music.title,
+                            genre : music.genre,
+                        }, {logging:false});
+            let addalbum = await MusicAlbum.create({
+                            album : music.album
+                        }, {logging:false});
+            const result = addmusic.dataValues;
+            
+            await addmusic.setMusicAlbum(addalbum);
+
+            console.log('addmusic result : ', result);
+            return result;
         } catch (error) {
-            console.log(error);
+            console.error('addMusic error ', error);
         }
     }
 
     updateMusic = async (id, music) => {
         try {
-            let ret = await db.collection('musiclist').updateOne({_id: new ObjectID(id)}, {
-                $set : {artist: music.artist, title: music.title, genre: music.genre
-                }
-            });
-            return ret;
-        } catch (err) {
-            console.error(err);
+            let result = await Musiclist.update(
+                {
+                    artist: music.artist,
+                    title: music.title,
+                    genre: music.genre
+                },
+                { where: { musicid: { [Op.eq]:id } } }
+            );
+            console.log("updateMusic : " , result);
+            return result;
+        }
+        catch (error) {
+            console.log('updateMusic error : ', error);
         }
     }
 
     deleteMusic = async (musicid) => {
         try {
-            let result = await db.collection('musiclist').deleteOne({ _id: new ObjectID(musicid) });
-        } catch (error) {
-            console.log(error);
+            let result = await Musiclist.destroy({ where: { musicid: { [Op.eq]: musicid } } });
+            console.log('deleteMusic result : ', result);
+        }
+        catch (error) {
+            console.log('deleteMusic error :', error);
         }
     }
 

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const music = require('../model/MusicModel');
 router.use(express.static(__dirname + '/public'));
+
 router.get('/', index);
 router.get('/login', login_form);
 router.get('/music', showMusicList);
