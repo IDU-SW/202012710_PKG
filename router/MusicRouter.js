@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const music = require('../model/MusicModel');
-
+router.use(express.static(__dirname + '/public'));
+router.get('/', index);
+router.get('/login', login_form);
 router.get('/music', showMusicList);
 router.get('/music/add', addMusicForm);
 router.get('/music/update/:musicId', updateMusicForm);
@@ -11,6 +13,15 @@ router.post('/music/delete', deleteMusic);
 router.post('/music/:musicId', updateMusic);
 
 module.exports = router;
+
+function index (req, res){
+    res.render('index')
+}
+
+function login_form (req, res){
+    res.render('login')
+}
+
 
 function addMusicForm(req, res){
     res.render('addmusicform')
