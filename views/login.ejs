@@ -59,24 +59,29 @@
 						<div class="contact_form_title text-center">회원가입</div>
 						<div class="row">
 							<div class="col-lg-8 offset-lg-2">
-								<form action="#" method="POST" id="contact_form" class="contact_form">
+								<form action="/member" method="post" id="contact_form" class="contact_form" enctype="multipart/form-data">
 									<div class="row">
 										<div class="col-md-6 contact_col">
-											<input type="text" name="name" class="contact_input" placeholder="이름"" required="required">
+											<input type="text" name="name" class="contact_input" placeholder="이름" required="required">
 										</div>
 										<div class="col-md-6">
-											<input type="text" name="id" class="contact_input" placeholder="아이디" required="required">
+											<input type="text" name="memberid" class="contact_input" placeholder="아이디" required="required">
 										</div>
 									</div>
 									<div class="row">
 										<div class="col-md-6 contact_col">
-											<input type="password" name="pw" class="contact_input" placeholder="비밀번호" required="required">
+											<input type="password" name="password" class="contact_input" placeholder="비밀번호" required="required">
 										</div>
 										<div class="col-md-6">
 											<input type="password" class="contact_input" placeholder="비밀번호 확인" required="required">
 										</div>
 									</div>
-									<button class="contact_button button_fill ml-auto mr-auto">회원가입하기</button>
+									<div class="row">										
+										<div class="col-md-12 contact_col">
+											<input type="file" name="memberimage" class="contact_input">
+										</div>
+									</div>
+									<input type="submit" class="contact_button button_fill ml-auto mr-auto" value="회원가입하기">
 								</form>
 							</div>
 						</div>	

@@ -4,8 +4,8 @@ const fs = require('fs');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op
 
-const sequelize = new Sequelize('music', 'kyunggeun', 'cometrue', {
-    dialect: 'mysql', host: '127.0.0.1'
+const sequelize = new Sequelize('NodeProject', 'admin', 'cometrue', {
+    dialect: 'mysql', host: 'idu-2020.cqve1sjxosi6.ap-northeast-2.rds.amazonaws.com'
 });
 
 class Musiclist extends Sequelize.Model {}
@@ -51,7 +51,7 @@ MusicAlbum.init({
 class Music {
     constructor(){
         try{
-            this.prepareModel();
+            //this.prepareModel();
         } catch(error) {
             console.error("constructor error ", error);
         }
@@ -61,7 +61,7 @@ class Music {
         try {
             await Musiclist.sync({force:true});
             await MusicAlbum.sync({force:true});
-
+            
             Musiclist.hasOne(MusicAlbum, {
                 foreignKey:'fk_musiclist_id',
                 onDelete:'cascade'

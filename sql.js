@@ -1,10 +1,10 @@
 const mysql = require('mysql2');
 const dbConfig = {
-    host: 'localhost',
-    user: 'kyunggeun',
+    host: 'idu-2020.cqve1sjxosi6.ap-northeast-2.rds.amazonaws.com',
+    user: 'admin',
     password: 'cometrue',
     port: 3306,
-    database: 'music'
+    database: 'NodeProject'
 };
 
 function connect() {
