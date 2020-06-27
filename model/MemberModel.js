@@ -2,6 +2,9 @@ const fs = require('fs');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op
 const log4js = require('log4js');
+var log = log4js.getLogger();
+log.level = 'debug';
+log.debug("MemberRouter");
 
 const sequelize = new Sequelize('NodeProject', 'admin', 'cometrue', {
     dialect: 'mysql', host: 'idu-2020.cqve1sjxosi6.ap-northeast-2.rds.amazonaws.com'
@@ -66,6 +69,50 @@ class Member {
             return result;
         } catch (error) {
             console.error('add Member error ', error);
+        }
+    }
+
+    login = async (id, pw) => {
+        try {
+            let loginMember = await MemberInfo.findOne({
+                where:{memberid:id, password:pw}
+            })
+            log.debug("로그인 정보2 : " + loginMember);
+            if (loginMember == null) 
+                return null;
+            else
+                return loginMember.get(0);
+        } catch (error) {
+            console.error('login Member error ', error);
+        }
+    }
+
+    readMember = async (id) => {
+        try {
+            let readMember = await MemberInfo.findOne({
+                where:{memberid:id}
+            })
+            return readMember.get(0);
+        } catch (error) {
+            console.error('read Member error ', error);
+        }
+    }
+
+    updateMember = async (nid, memberinfo) => {
+        try {
+            log.debug("updateMember 11" , nid, "  ", memberinfo);
+            let result = await MemberInfo.update(
+                {
+                    name: memberinfo.name,
+                    memberid: memberinfo.memberid,
+                    password: memberinfo.password
+                },
+                { where: { id: { [Op.eq]:nid } } }
+            );
+            return result;
+        }
+        catch (error) {
+            console.log('update Member error : ', error);
         }
     }
 }

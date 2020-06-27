@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>로그인</title>
+<title>회원 정보 수정</title>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="description" content="My Podcast template project">
@@ -12,16 +12,6 @@
 <link rel="stylesheet" type="text/css" href="styles/contact.css">
 <link rel="stylesheet" type="text/css" href="styles/contact_responsive.css">
 </head>
-<script>
-	var a = <%= loginState %>;
-	if (a ==1)
-		alert("회원정보 불일치");
-	else if (a == 2){
-
-	}
-	else
-		alert("회원가입 완료");
-</script>
 <body>
 
 	<%- include('nav/header'); -%>
@@ -32,7 +22,7 @@
 		<div class="parallax_background parallax-window" data-parallax="scroll" data-image-src="images/index.gif" data-speed="0.8"></div>
 		<div class="home_container d-flex flex-column align-items-center justify-content-center">
 			<div class="home_content">
-				<div class="home_title"><h1>로그인 / 회원가입</h1></div>
+				<div class="home_title"><h1>회원 정보 수정</h1></div>
 			</div>
 		</div>
 	</div>
@@ -46,36 +36,16 @@
 
 					<!-- Contact Form -->
 					<div class="contact_form_container">
-						<div class="contact_form_title text-center">로그인</div>
+						<div class="contact_form_title text-center">회원 정보 수정</div>
 						<div class="row">
 							<div class="col-lg-8 offset-lg-2">
-								<form action="/login" method="POST" id="contact_form" class="contact_form">
+								<form action="/member-edit" method="post" id="contact_form" class="contact_form">
 									<div class="row">
 										<div class="col-md-6 contact_col">
-											<input type="text" name="id" class="contact_input" placeholder="아이디" required="required">
+											<input type="text" name="name" class="contact_input" placeholder="이름" required="required" value="<%=memberinfo.name%>">
 										</div>
 										<div class="col-md-6">
-											<input type="password" name="pw" class="contact_input" placeholder="비밀번호" required="required">
-										</div>
-									</div>
-									<input type="submit" class="contact_button button_fill ml-auto mr-auto" value="로그인">
-								</form>
-							</div>
-						</div>	
-					</div>
-
-					<!-- Contact Form -->
-					<div class="contact_form_container">
-						<div class="contact_form_title text-center">회원가입</div>
-						<div class="row">
-							<div class="col-lg-8 offset-lg-2">
-								<form action="/member" method="post" id="contact_form" class="contact_form" enctype="multipart/form-data">
-									<div class="row">
-										<div class="col-md-6 contact_col">
-											<input type="text" name="name" class="contact_input" placeholder="이름" required="required">
-										</div>
-										<div class="col-md-6">
-											<input type="text" name="memberid" class="contact_input" placeholder="아이디" required="required">
+											<input type="text" name="memberid" class="contact_input" placeholder="아이디" required="required" value="<%=memberinfo.memberid%>">
 										</div>
 									</div>
 									<div class="row">
@@ -86,12 +56,7 @@
 											<input type="password" class="contact_input" placeholder="비밀번호 확인" required="required">
 										</div>
 									</div>
-									<div class="row">										
-										<div class="col-md-12 contact_col">
-											<input type="file" name="memberimage" class="contact_input" required="required">
-										</div>
-									</div>
-									<input type="submit" class="contact_button button_fill ml-auto mr-auto" value="회원가입하기">
+									<input type="submit" class="contact_button button_fill ml-auto mr-auto" value="수정하기">
 								</form>
 							</div>
 						</div>	

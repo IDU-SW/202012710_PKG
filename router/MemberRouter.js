@@ -2,10 +2,12 @@ const express = require('express');
 const path = require("path")
 const router = express.Router();
 const member = require('../model/MemberModel');
+const session = require('express-session');
+const crypto = require('crypto');
+var salt = "salt";
 const log4js = require('log4js');
 var log = log4js.getLogger();
 log.level = 'debug';
-log.debug("MemberRouter");
 
 const multer = require('multer');
 const multerS3 = require("multer-s3");
@@ -26,18 +28,49 @@ let upload = multer({
     })
 });
 
+router.use(session({
+    key: 'sid',
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      maxAge: 24000 * 60 * 60 // 쿠키 유효기간 24시간
+    }
+}));
+
 router.use(express.static(__dirname + '/public'));
 
 router.post('/member', upload.single('memberimage'), addMember);
-router.get('/', (req, res)=>res.render('index'));
-router.get('/login', (req, res)=>res.render('login'));
+router.get('/', (req, res)=>res.render('index',{session:req.session.name}));
+router.get('/member-edit-form', memberEditForm);
+router.post('/member-edit', memberEdit);
+router.get('/login', loginForm);
+router.get('/logout', logout);
 router.get('/about', (req, res)=>res.render('about'));
 router.get('/episodes', (req, res)=>res.render('episodes'));
 router.get('/blog', (req, res)=>res.render('blog'));
+router.post('/login', login);
 
 module.exports = router;
 
+function loginForm(req, res) {
+    res.render('login', {loginState:2})
+}
 
+async function memberEditForm(req, res){
+    result = await member.readMember(req.session.name.memberid);
+    res.render('member-edit', {memberinfo:result, session:req.session.name})
+}
+
+async function memberEdit(req, res){
+    var name = req.body.name;
+    var memberid = req.body.memberid;
+    var password = req.body.password;
+
+    const memberinfo = {name, memberid, password};
+    await member.updateMember(req.session.name.id,memberinfo);
+    res.redirect("/logout");
+}
 
 async function addMember(req, res){
     var image = {
@@ -45,103 +78,50 @@ async function addMember(req, res){
         url: req.file.location
     }
 
-    log.debug("addMember ", image);
-    const name = req.body.name;
-    const memberid = req.body.memberid;
-    const password = req.body.password;
+    var name = req.body.name;
+    var memberid = req.body.memberid;
+    var password = req.body.password;
 
     if (!name && !memberid && !password) {
         res.status(400).send({error:'누락 ',name, memberid, password});
         return;
     }
 
-    const memberinfo = req.body;
+    var cipher = crypto.createHash('sha256');
+    cipher.update(password + salt);
+    password = cipher.digest('hex');
+
+    const memberinfo = {name, memberid, password};
     try {
         await member.addMember(memberinfo, image.url);
-        res.render('index');
+        res.render('login',{loginState:3});
     } catch (error) {
         res.status(500).send(error.msg);
     }
 }
 
-async function updateMusicForm(req, res){
-    try {
-        const musicId = req.params.musicId;
-        const info = await music.getMusicDetail(musicId);
-        res.render('updatemusicform',{result:info})
-    }
-    catch ( error ) {
-        console.log('Can not find, 404');
-        res.status(error.code).send({msg:error.msg});
-    }
-}
+async function login(req, res){
+    var memberid = req.body.id;
+    var password = req.body.pw;
+    // var cipher = crypto.createHash('sha256');
+    // cipher.update(password + salt);
+    // password = cipher.digest('hex');
 
-async function showMusicList(req, res) {
-    const musicList = await  music.getMusicList();
-    const result = { count:musicList.length, data:musicList};
-    //res.send(result);
-    res.render('getmusiclist', {result:result})
-}
-
-async function showMusicDetail(req, res) {
-    try {
-        const musicId = req.params.musicId;
-        const data = await music.getMusicDetail(musicId);
-        res.render('getmusic',{result:data})
-    }
-    catch ( error ) {
-        console.log('Can not find, 404');
-        res.status(error.code).send({msg:error.msg});
-    }
-}
-
-async function addMusic(req, res) {
-    const artist = req.body.artist;
-
-    if (!artist) {
-        res.status(400).send({error:'artist 누락'});
-        return;
-    }
-
-    const addmusic =req.body;
-    console.log("music : ", music);
-    try {
-        const data = await music.addMusic(addmusic);
-        res.render('addmusic',{result:data});
-    }
-    catch ( error ) {
+    try{
+        result = await member.login(memberid, password);
+        if (result != null) {
+            req.session.name = result;
+            res.render('index', {session:result});
+        } else {
+            res.render('login',{loginState:1});
+        }
+    } catch (error) {
         res.status(500).send(error.msg);
     }
 }
 
-async function updateMusic(req, res) {
-    
-    const id = req.params.musicId;
-    const updatemusic = req.body;
+function logout(req, res){
+    req.session.destroy();
 
-    if (!id) {
-        res.status(400).send({error:'ERROR'});
-        return;
-    }
-
-    try {
-        await music.updateMusic(id, updatemusic);
-        const result = await music.getMusicDetail(id);
-        res.render('updatemusic',{msg:'success',music:result});
-    }
-    catch ( error ) {
-        res.status(500).send(error.msg);
-    }
-}
-
-async function deleteMusic(req, res) {
-    try {
-        const musicId = req.body.id;
-        await music.deleteMusic(musicId);
-        
-        res.render('deletemusic',{msg:'음악 삭제 완료'})
-    }
-    catch ( error ) {
-        res.status(500).send({msg:error.msg});
-    }
+    res.redirect("/");
 }
