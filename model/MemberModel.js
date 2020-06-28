@@ -48,9 +48,19 @@ class Member {
     async prepareModel() {
         try {
             await MemberInfo.sync({force:true});
+
+            await this.allDataInsert();
         }
         catch (error) {
             console.log('prepareModel Error ', error);
+        }
+    }
+
+    async allDataInsert() {
+        const data = fs.readFileSync('./model/data-member.json');
+        const memberlist = JSON.parse(data);
+        for (var member of memberlist ) {
+            await this.addMember1(member);
         }
     }
 
@@ -62,6 +72,24 @@ class Member {
                             name : memberinfo.name,
                             password : memberinfo.password,
                             memberimage : imageurl
+                        }, {logging:false});
+            
+            const result = addmember.dataValues;
+
+            return result;
+        } catch (error) {
+            console.error('add Member error ', error);
+        }
+    }
+
+    addMember1 = async (memberinfo) => {
+        try {
+            
+            let addmember = await MemberInfo.create({ 
+                            memberid : memberinfo.memberid,
+                            name : memberinfo.name,
+                            password : memberinfo.password,
+                            memberimage : memberinfo.memberimage
                         }, {logging:false});
             
             const result = addmember.dataValues;

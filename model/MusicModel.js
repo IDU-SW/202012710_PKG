@@ -16,13 +16,17 @@ Musiclist.init({
         autoIncrement: true,
         primaryKey: true
     },
+    title:{
+        type: Sequelize.STRING,
+        field: 'title'
+    },
     artist:{
         type: Sequelize.STRING,
         field: 'artist'
     },
-    title:{
-        type: Sequelize.STRING,
-        field: 'title'
+    soundcloudid:{
+        type: Sequelize.INTEGER,
+        field: 'soundcloudid'
     },
     genre:{
         type: Sequelize.STRING,
@@ -30,28 +34,10 @@ Musiclist.init({
     }
 },{tableName:'musiclist',sequelize,timestamps:false, sequelize });
 
-class MusicAlbum extends Sequelize.Model {}
-MusicAlbum.init({
-    albumid:{
-        type: Sequelize.INTEGER,
-        unique: true,
-        autoIncrement: true,
-        primaryKey: true
-    },
-    fk_musiclist_id:{
-        type: Sequelize.INTEGER,
-        field: 'fk_musiclist_id'
-    },
-    album:{
-        type: Sequelize.STRING,
-        field: 'album'
-    }
-},{tableName:'musicalbum',sequelize,timestamps:false, sequelize });
-
 class Music {
     constructor(){
         try{
-            //this.prepareModel();
+            this.prepareModel();
         } catch(error) {
             console.error("constructor error ", error);
         }
@@ -60,12 +46,6 @@ class Music {
     async prepareModel() {
         try {
             await Musiclist.sync({force:true});
-            await MusicAlbum.sync({force:true});
-            
-            Musiclist.hasOne(MusicAlbum, {
-                foreignKey:'fk_musiclist_id',
-                onDelete:'cascade'
-            });
 
             await this.allDataInsert();
         }
@@ -75,7 +55,7 @@ class Music {
     }
 
     async allDataInsert() {
-        const data = fs.readFileSync('./model/data.json');
+        const data = fs.readFileSync('./model/data-music.json');
         const musiclist = JSON.parse(data);
         for (var music of musiclist ) {
             await this.addMusic(music);
@@ -98,7 +78,6 @@ class Music {
         try {
             const row = await Musiclist.findAll({
                 where:{musicid:id},
-                include: [{model:MusicAlbum}]
             })
             if ( row ) {
                 console.log("getMusicDetail row : " , row[0])
@@ -115,16 +94,12 @@ class Music {
         try {
             
             let addmusic = await Musiclist.create({ 
-                            artist : music.artist,
                             title : music.title,
+                            artist : music.artist,
+                            soundcloudid:music.soundcloudid,
                             genre : music.genre,
                         }, {logging:false});
-            let addalbum = await MusicAlbum.create({
-                            album : music.album
-                        }, {logging:false});
             const result = addmusic.dataValues;
-            
-            await addmusic.setMusicAlbum(addalbum);
 
             console.log('addmusic result : ', result);
             return result;
@@ -139,6 +114,7 @@ class Music {
                 {
                     artist: music.artist,
                     title: music.title,
+                    soundcloudid:music.soundcloudid,
                     genre: music.genre
                 },
                 { where: { musicid: { [Op.eq]:id } } }

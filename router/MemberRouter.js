@@ -47,7 +47,6 @@ router.post('/member-edit', memberEdit);
 router.get('/login', loginForm);
 router.get('/logout', logout);
 router.get('/about', (req, res)=>res.render('about'));
-router.get('/episodes', (req, res)=>res.render('episodes'));
 router.get('/blog', (req, res)=>res.render('blog'));
 router.post('/login', login);
 
@@ -103,14 +102,15 @@ async function addMember(req, res){
 async function login(req, res){
     var memberid = req.body.id;
     var password = req.body.pw;
-    // var cipher = crypto.createHash('sha256');
-    // cipher.update(password + salt);
-    // password = cipher.digest('hex');
+    var cipher = crypto.createHash('sha256');
+    cipher.update(password + salt);
+    password = cipher.digest('hex');
 
     try{
         result = await member.login(memberid, password);
         if (result != null) {
             req.session.name = result;
+            log.debug("login ", result);
             res.render('index', {session:result});
         } else {
             res.render('login',{loginState:1});

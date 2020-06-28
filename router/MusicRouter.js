@@ -1,27 +1,38 @@
 const express = require('express');
 const router = express.Router();
 const music = require('../model/MusicModel');
+const session = require('express-session');
 router.use(express.static(__dirname + '/public'));
 
+router.use(session({
+    key: 'sid',
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      maxAge: 24000 * 60 * 60 // 쿠키 유효기간 24시간
+    }
+}));
+
 router.get('/music', showMusicList);
-router.get('/music/add', addMusicForm);
-router.get('/music/update/:musicId', updateMusicForm);
+router.get('/music-add', addMusicForm);
+router.get('/music-update', updateMusicForm);
 router.get('/music/:musicId', showMusicDetail);
 router.post('/music', addMusic);
-router.post('/music/delete', deleteMusic);
-router.post('/music/:musicId', updateMusic);
+router.get('/music-delete/:musicId', deleteMusic);
+router.post('/music-update/', updateMusic);
 
 module.exports = router;
 
 function addMusicForm(req, res){
-    res.render('addmusicform')
+    res.render('music-add',{session:req.session.name});
 }
 
 async function updateMusicForm(req, res){
     try {
-        const musicId = req.params.musicId;
+        const musicId = req.query.musicid;
         const info = await music.getMusicDetail(musicId);
-        res.render('updatemusicform',{result:info})
+        res.render('music-update',{result:info,session:req.session.name})
     }
     catch ( error ) {
         console.log('Can not find, 404');
@@ -32,8 +43,7 @@ async function updateMusicForm(req, res){
 async function showMusicList(req, res) {
     const musicList = await  music.getMusicList();
     const result = { count:musicList.length, data:musicList};
-    //res.send(result);
-    res.render('getmusiclist', {result:result})
+    res.render('music-readlist', {result:result,session:req.session.name});
 }
 
 async function showMusicDetail(req, res) {
@@ -49,18 +59,11 @@ async function showMusicDetail(req, res) {
 }
 
 async function addMusic(req, res) {
-    const artist = req.body.artist;
-
-    if (!artist) {
-        res.status(400).send({error:'artist 누락'});
-        return;
-    }
-
     const addmusic =req.body;
     console.log("music : ", music);
     try {
         const data = await music.addMusic(addmusic);
-        res.render('addmusic',{result:data});
+        res.redirect("/music");
     }
     catch ( error ) {
         res.status(500).send(error.msg);
@@ -69,7 +72,7 @@ async function addMusic(req, res) {
 
 async function updateMusic(req, res) {
     
-    const id = req.params.musicId;
+    const id = req.body.musicid;
     const updatemusic = req.body;
 
     if (!id) {
@@ -79,8 +82,7 @@ async function updateMusic(req, res) {
 
     try {
         await music.updateMusic(id, updatemusic);
-        const result = await music.getMusicDetail(id);
-        res.render('updatemusic',{msg:'success',music:result});
+        res.redirect("/music");
     }
     catch ( error ) {
         res.status(500).send(error.msg);
@@ -89,10 +91,9 @@ async function updateMusic(req, res) {
 
 async function deleteMusic(req, res) {
     try {
-        const musicId = req.body.id;
+        const musicId = req.params.musicId;
         await music.deleteMusic(musicId);
-        
-        res.render('deletemusic',{msg:'음악 삭제 완료'})
+        res.redirect("/music");
     }
     catch ( error ) {
         res.status(500).send({msg:error.msg});
