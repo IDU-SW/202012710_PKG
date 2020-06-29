@@ -66,6 +66,69 @@
 
 --------------
 
+- ### 로그인
+
+#### 요청
+
+|    업무     | 회원가입 |
+| :---------: | ------------------ |
+|     URL     | /member-edit-form  |
+| 요청 메소드 | GET               |
+
+##### 요청 메시지
+세션값을 이용하여 요청
+``` json
+{
+    "memberid":"admin",
+    "password": "1234",
+}
+```
+
+#### 응답
+    
+``` json
+{
+    "memberid":"admin",
+    "name": "관리자",
+    "password": "1234",
+    "memberimage": "https://idu-2020-0710.s3.ap-northeast- 2.amazonaws.com/upload/21function%20getMinutes%28%29%20%7B%20%5Bnative%20code%5D%20%7D39513KakaoTalk_20200626_144943005_04.jpg"
+}
+```
+
+--------------
+
+- ### 회원정보 
+
+#### 요청
+
+|    업무     | 회원가입 |
+| :---------: | ------------------ |
+|     URL     | /login            |
+| 요청 메소드 | POST                |
+| 컨텐츠 타입 | application/json    |
+| 메세지 구조 | memberid    |
+|  | password    |
+
+##### 요청 메시지
+
+``` json
+{
+    "memberid":"admin",
+    "password": "1234",
+}
+```
+
+#### 응답
+    
+``` json
+{
+    "memberid":"admin",
+    "name": "관리자",
+    "password": "1234",
+    "memberimage": "https://idu-2020-0710.s3.ap-northeast- 2.amazonaws.com/upload/21function%20getMinutes%28%29%20%7B%20%5Bnative%20code%5D%20%7D39513KakaoTalk_20200626_144943005_04.jpg"
+}
+```
+
 --------------
 
 - ### 음악 목록 전체보기
