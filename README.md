@@ -41,13 +41,30 @@
 |  | memberid    |
 |  | memberimage    |
 
+##### 요청 메시지
+
+``` json
+{
+    "memberid":"admin",
+    "name": "관리자",
+    "password": "1234",
+    "memberimage": ""https://idu-2020-0710.s3.ap-northeast-2.amazonaws.com/upload/21function%20getMinutes%28%29%20%7B%20%5Bnative%20code%5D%20%7D39513KakaoTalk_20200626_144943005_04.jpg"
+}
+```
 
 #### 응답
-
-| 컨텐트 타입 | JSON                                                         |
-| :---------: | ------------------------------------------------------------ |
-| 메세지 구조 | - id : 음악 ID<br />- singer : 가수<br />- song : 노래<br />- genre : 음악 장르<br /> |
-|  메세지 예  | {"data":[ <br/>{"id":0,"singer":"weekend","song":"Blinding Lights","genre":"POP"}, <br/>{"id":1,"singer":"Dua Lipa","song":"Physical","genre":"POP"}, <br/>{"id":2,"singer":"JACKBOYS","song":"OUT WEST","genre":"Hip Hop"}, <br/>{"id":3,"singer":"SZA, Justin Timberlake","song":"The Other Side","genre":"POP"}, <br/>{"id":4,"singer":"Arizona Zervas","song":"ROXANNE","genre":"Hip Hop"}], <br/>"count":5}}
+    
+``` json
+{
+    "msg": "success",
+    "data": {
+        "memberid":"admin",
+        "name": "관리자",
+        "password": "1234",
+        "memberimage": ""https://idu-2020-0710.s3.ap-northeast- 2.amazonaws.com/upload/21function%20getMinutes%28%29%20%7B%20%5Bnative%20code%5D%20%7D39513KakaoTalk_20200626_144943005_04.jpg"
+     }
+}
+```
 
 --------------
 
