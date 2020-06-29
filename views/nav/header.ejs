@@ -47,10 +47,13 @@
 		<div class="menu_content d-flex flex-column align-items-end justify-content-start">
 			<ul class="menu_nav_list text-right">
 				<li><a href="/">Home</a></li>
-				<li><a href="about.html">About</a></li>
-				<li><a href="episodes.html">Episodes</a></li>
-				<li><a href="blog.html">Blog</a></li>
-				<li><a href="contact.html">Contact</a></li>
+				<li><a href="/music">MusicList</a></li>
+				<% if(locals.session){%>
+					<li><a href="/member-edit-form"><%= locals.session.name %>님 안녕하세요. </a></li>
+					<li><a href="/logout">Logout</a></li>
+				<% } else { %>
+					<li><a href="/login">Login/Sign Up</a></li>
+				<% } %>
 			</ul>
 			<div class="menu_extra d-flex flex-column align-items-end justify-content-start">
 				<div class="menu_submit"><a href="#">Submit your podcast</a></div>

@@ -110,7 +110,8 @@ async function login(req, res){
         if (result != null) {
             req.session.name = result;
             log.debug("login ", result);
-            res.render('index', {session:result});
+            //res.render('index', {session:result});
+            res.redirect("/");
         } else {
             res.render('login',{loginState:1});
         }
