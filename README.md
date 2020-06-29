@@ -3,8 +3,6 @@
 
 <http://54.180.108.251:3000/>
 
-===
-
 --------------
 
 - ### 요청목록
@@ -48,7 +46,7 @@
     "memberid":"admin",
     "name": "관리자",
     "password": "1234",
-    "memberimage": ""https://idu-2020-0710.s3.ap-northeast-2.amazonaws.com/upload/21function%20getMinutes%28%29%20%7B%20%5Bnative%20code%5D%20%7D39513KakaoTalk_20200626_144943005_04.jpg"
+    "memberimage": "https://idu-2020-0710.s3.ap-northeast-2.amazonaws.com/upload/21function%20getMinutes%28%29%20%7B%20%5Bnative%20code%5D%20%7D39513KakaoTalk_20200626_144943005_04.jpg"
 }
 ```
 
@@ -61,7 +59,7 @@
         "memberid":"admin",
         "name": "관리자",
         "password": "1234",
-        "memberimage": ""https://idu-2020-0710.s3.ap-northeast- 2.amazonaws.com/upload/21function%20getMinutes%28%29%20%7B%20%5Bnative%20code%5D%20%7D39513KakaoTalk_20200626_144943005_04.jpg"
+        "memberimage": "https://idu-2020-0710.s3.ap-northeast- 2.amazonaws.com/upload/21function%20getMinutes%28%29%20%7B%20%5Bnative%20code%5D%20%7D39513KakaoTalk_20200626_144943005_04.jpg"
      }
 }
 ```
