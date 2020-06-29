@@ -16,6 +16,7 @@ router.use(session({
 
 router.get('/',index);
 router.get('/music', showMusicList);
+router.get('/music-search', searchMusicList);
 router.get('/music-add', addMusicForm);
 router.get('/music-update', updateMusicForm);
 router.get('/music/:musicId', showMusicDetail);
@@ -50,6 +51,13 @@ async function updateMusicForm(req, res){
 
 async function showMusicList(req, res) {
     const musicList = await  music.getMusicList();
+    const result = { count:musicList.length, data:musicList};
+    res.render('music-readlist', {result:result,session:req.session.name});
+}
+
+async function searchMusicList(req, res) {
+    const keyword = req.query.keyword;
+    const musicList = await  music.getSearchMusicList(keyword);
     const result = { count:musicList.length, data:musicList};
     res.render('music-readlist', {result:result,session:req.session.name});
 }

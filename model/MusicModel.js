@@ -74,6 +74,20 @@ class Music {
         return musiclist;
     }
 
+    getSearchMusicList = async (keyword) => {
+        let musiclist;
+        await Musiclist.findAll({
+            where:{[Op.or]:[{title:{[Op.like]: "%" + keyword + "%"}},{artist:{[Op.like]: "%" + keyword + "%"}}]},
+        })
+        .then( result => {
+            musiclist = result;
+        })
+        .catch( error => {
+            console.error('getSearchMusicList error :', error);
+        });
+        return musiclist;
+    }
+
     getMusicDetail = async (id) => {
         try {
             const row = await Musiclist.findAll({
