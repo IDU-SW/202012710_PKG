@@ -41,7 +41,6 @@ router.use(session({
 router.use(express.static(__dirname + '/public'));
 
 router.post('/member', upload.single('memberimage'), addMember);
-router.get('/', (req, res)=>res.render('index',{session:req.session.name}));
 router.get('/member-edit-form', memberEditForm);
 router.post('/member-edit', memberEdit);
 router.get('/login', loginForm);

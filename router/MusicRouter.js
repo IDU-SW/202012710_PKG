@@ -14,6 +14,7 @@ router.use(session({
     }
 }));
 
+router.get('/',index);
 router.get('/music', showMusicList);
 router.get('/music-add', addMusicForm);
 router.get('/music-update', updateMusicForm);
@@ -23,6 +24,13 @@ router.get('/music-delete/:musicId', deleteMusic);
 router.post('/music-update/', updateMusic);
 
 module.exports = router;
+
+async function index (req, res){
+    var date = new Date();
+    var day =date.getFullYear() +"년 "+ (date.getMonth()+1)+"월 "+ date.getDate() +"일";
+    var result = await music.getMusicDetail(date.getDay());
+    res.render('index',{session:req.session.name, day:day,result:result})
+}
 
 function addMusicForm(req, res){
     res.render('music-add',{session:req.session.name});

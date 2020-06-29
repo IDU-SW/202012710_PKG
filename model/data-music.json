@@ -1,7 +1,12 @@
 [
     {"musicid":1, "title":"빈집", "artist":"기리보이","soundcloudid":509353899,"genre":"HipHop"},
-    {"musicid":2, "title":"빈집", "artist":"기리보이","soundcloudid":509353899,"genre":"Ballad"},
-    {"musicid":3, "title":"빈집", "artist":"기리보이","soundcloudid":509353899,"genre":"Idol"},
-    {"musicid":4, "title":"빈집", "artist":"기리보이","soundcloudid":509353899,"genre":"Ballad"},
-    {"musicid":5, "title":"빈집", "artist":"기리보이","soundcloudid":509353899,"genre":"HipHop"}
+    {"musicid":2, "title":"호구", "artist":"기리보이","soundcloudid":490699131,"genre":"HipHop"},
+    {"musicid":3, "title":"키보드", "artist":"기리보이","soundcloudid":503491947,"genre":"HipHop"},
+    {"musicid":4, "title":"DNA", "artist":"방탄소년단","soundcloudid":343188402,"genre":"Idol"},
+    {"musicid":5, "title":"이런 엔딩", "artist":"아이유","soundcloudid":510281112,"genre":"Ballad"},
+    {"musicid":6, "title":"연애소설", "artist":"에픽하이","soundcloudid":348170370,"genre":"HipHop"},
+    {"musicid":7, "title":"홀로", "artist":"정키","soundcloudid":317738661,"genre":"Ballad"},
+    {"musicid":8, "title":"진심", "artist":"정키","soundcloudid":37195794,"genre":"Ballad"},
+    {"musicid":9, "title":"I'm Fine", "artist":"방탄소년단","soundcloudid":489974193,"genre":"Idol"},
+    {"musicid":10, "title":"IF YOU", "artist":"빅뱅","soundcloudid":212653191,"genre":"Idol"}
 ]
