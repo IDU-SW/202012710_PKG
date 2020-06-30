@@ -194,14 +194,14 @@ password : 1234
         "musicid":1,
         "title": "빈집",
         "artist": "기리보이",
-        "soundcloudid": "3463464"
+        "soundcloudid": "3463464",
         "genre":"HipHop"
      },
     {
         "musicid":2,
         "title": "호구",
         "artist": "기리보이",
-        "soundcloudid": "9483587"
+        "soundcloudid": "9483587",
         "genre":"HipHop"
      },
      ....
@@ -235,7 +235,7 @@ password : 1234
         "musicid":1,
         "title": "빈집",
         "artist": "기리보이",
-        "soundcloudid": "3463464"
+        "soundcloudid": "3463464",
         "genre":"HipHop"
      }
 }
@@ -262,7 +262,7 @@ password : 1234
     "musicid":1,
     "title": "빈집",
     "artist": "기리보이",
-    "soundcloudid": "3463464"
+    "soundcloudid": "3463464",
     "genre":"HipHop"
 }
 
@@ -291,7 +291,7 @@ password : 1234
     "title":"붐바야",
     "artist":"블랙핑크",
     "soundcloudid":"5456321",
-    "genre":"Idol",
+    "genre":"Idol"
 }
 ```
 
@@ -344,11 +344,11 @@ password : 1234
 
 ``` json
 {
-    "musicid":10
+    "musicid":10,
     "title":"붐바야",
     "artist":"블랙핑크",
     "soundcloudid":"5456321",
-    "genre":"Idol",
+    "genre":"Idol"
 }
 ```
 
